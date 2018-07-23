@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="gradStart">#19AA8B</color>
+    <color name="gradStop">#23A7D8</color>
+
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#8BC34A</color>
+    <!--custom-->
+    <color name="ColorPrimary">#4CAF50</color>
+    <color name="ColorDarkPrimary">#388E3C</color>
+    <color name="ColorLightPrimary">#C8E6C9</color>
+    <color name="ColorAccent">#8BC34A</color>
+    <color name="ColorDivider">#BDBDBD</color>
+    <!--text-->
+    <color name="TextPrimary">#212121</color>
+    <color name="TextIcon">#FFFFFF</color>
+    <color name="TextSecondary">#757575</color>
+    <!--end custom-->
+</resources>

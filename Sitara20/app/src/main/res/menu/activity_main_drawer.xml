@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="Dashboard">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_berita"
+                    android:icon="@drawable/home"
+                    android:title="Home" />
+
+                <item
+                    android:id="@+id/nav_pojok"
+                    android:icon="@drawable/pojok"
+                    android:title="Pojok Peradilan" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Status Perkara">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_profil"
+                    android:icon="@drawable/person1"
+                    android:title="Para Pihak" />
+                <item
+                    android:id="@+id/nav_dataumum"
+                    android:icon="@drawable/data_umum"
+                    android:title="Data Umum" />
+                <item
+                    android:id="@+id/nav_jadwalsidang"
+                    android:icon="@drawable/jadwal_sidang"
+                    android:title="Jadwal Sidang" />
+                <item
+                    android:id="@+id/nav_biayaperkara"
+                    android:icon="@drawable/biaya_perkara"
+                    android:title="Biaya Perkara" />
+                <item
+                    android:id="@+id/nav_riwayatperkara"
+                    android:icon="@drawable/riwayat"
+                    android:title="Riwayat Perkara" />
+                <item
+                    android:id="@+id/nav_aktecerai"
+                    android:icon="@drawable/akte_cerai"
+                    android:title="Akta Cerai" />
+
+            </group>
+        </menu>
+    </item>
+
+</menu>
