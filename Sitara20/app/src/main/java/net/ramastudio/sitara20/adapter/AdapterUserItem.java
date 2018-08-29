@@ -15,10 +15,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class Adapter_Profil extends RecyclerView.Adapter<Adapter_Profil.ViewHolder>{
+public class AdapterUserItem extends RecyclerView.Adapter<AdapterUserItem.ViewHolder>{
 
     List<UserItem> userItems;
-    public Adapter_Profil(List<UserItem> userItems){
+    public AdapterUserItem(List<UserItem> userItems){
         this.userItems = userItems;
     }
 

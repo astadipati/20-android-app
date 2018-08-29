@@ -1,31 +1,41 @@
 package net.ramastudio.sitara20.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
+import net.ramastudio.sitara20.BaseActivity;
 import net.ramastudio.sitara20.R;
-import net.ramastudio.sitara20.adapter.Adapter_Profil;
-import net.ramastudio.sitara20.utils.SharedPrefManager;
+import net.ramastudio.sitara20.adapter.AdapterUserItem;
+import net.ramastudio.sitara20.model.Session;
+import net.ramastudio.sitara20.model.User;
+import net.ramastudio.sitara20.model.UserItem;
+import net.ramastudio.sitara20.utils.Pref;
 import net.ramastudio.sitara20.utils.api.ApiService;
 import net.ramastudio.sitara20.utils.api.UtilsApi;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class ProfilActivity extends AppCompatActivity {
+public class ProfilActivity extends BaseActivity {
 
-    SharedPrefManager spMgr;
 
     private final ApiService mApiService;
-    @BindView(R.id.rv_profil)RecyclerView rvProfil;
+    @BindView(R.id.rv_profil)
+    RecyclerView rvProfil;
 
-    private Adapter_Profil adapter_profil;
+    private AdapterUserItem adapterUserItem;
+
+    ArrayList<UserItem> userItem = new ArrayList<>();
     public ProfilActivity() {
         this.mApiService = UtilsApi.getAPIService();
     }
 
+    Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +45,33 @@ public class ProfilActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Para Pihak");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        spMgr = new SharedPrefManager(getApplicationContext());
-
+        adapterUserItem = new AdapterUserItem(userItem);
         rvProfil = (RecyclerView) findViewById(R.id.rv_profil);
         rvProfil.setLayoutManager(new LinearLayoutManager(this));
-
-        setProfil(spMgr.getSPIDPerkara());
+        rvProfil.setAdapter(adapterUserItem);
+        session = Pref.getSession();
+        setProfil();
     }
 
     private void setProfil() {
-        ApiService api =
+        showLoading();
+        UtilsApi.getAPIService().getUser(session.idperkara).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                hideLoading();
+                if(response.isSuccessful()){
+                    userItem.clear();
+                    userItem.addAll(response.body().getUser());
+                    adapterUserItem.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                hideLoading();
+                toast("Gagal memuat data");
+            }
+        });
     }
 
 

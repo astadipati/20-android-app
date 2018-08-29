@@ -3,15 +3,18 @@ package net.ramastudio.sitara20;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import net.ramastudio.sitara20.utils.SharedPrefManager;
+import com.google.gson.Gson;
+
+import net.ramastudio.sitara20.model.Session;
+import net.ramastudio.sitara20.utils.Pref;
 import net.ramastudio.sitara20.utils.api.ApiService;
 import net.ramastudio.sitara20.utils.api.UtilsApi;
 
@@ -31,16 +34,17 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.etEmail)
     EditText etEmail;
-    @BindView(R.id.etPassword) EditText etPassword;
+    @BindView(R.id.etPassword)
+    EditText etPassword;
     @BindView(R.id.btnLogin)
     Button btnLogin;
-    @BindView(R.id.btnRegister) Button btnRegister;
+    @BindView(R.id.btnRegister)
+    Button btnRegister;
     ProgressDialog loading;
 
     Context mContext;
     ApiService mApiService;
 
-    SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mContext = this;
         mApiService = UtilsApi.getAPIService(); // meng-init yang ada di package apihelper
-        sharedPrefManager = new SharedPrefManager(this);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,18 +74,48 @@ public class LoginActivity extends AppCompatActivity {
 
         // Code berikut berfungsi untuk mengecek session, Jika session true ( sudah login )
         // maka langsung memulai MainActivity.
-        if (sharedPrefManager.getSPSudahLogin()){
+//        if (sharedPrefManager.getSPSudahLogin()){
+
+        // cek sesi aktif
+        if (Pref.getSession() != null) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             finish();
         }
     }
 
-    private void requestLogin(){
+    private void requestLogin() {
         mApiService.loginRequest(etEmail.getText().toString(), etPassword.getText().toString())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        loading.dismiss();
+                        if (response.isSuccessful()) {
+                            try {
+                                JSONObject obj = new JSONObject(response.body().string());
+                                if (obj.getBoolean("error")) {
+                                    // Jika login gagal
+                                    String error_message = obj.getString("error_msg");
+                                    Toast.makeText(mContext, error_message, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    // jika login berhasil, simpan sesi dari "user"
+                                    Toast.makeText(mContext, "Mengarahkan", Toast.LENGTH_SHORT).show();
+                                    Session session = new Gson().fromJson(obj.getString("user"), Session.class);
+                                    Pref.put(Session.class, session);
+                                    startActivity(new Intent(mContext, MainActivity.class)
+                                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    finish();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            loading.dismiss();
+                        }
+                    }
+                    /*public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()){
                             loading.dismiss();
                             try {
@@ -111,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             loading.dismiss();
                         }
-                    }
+                    }*/
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {

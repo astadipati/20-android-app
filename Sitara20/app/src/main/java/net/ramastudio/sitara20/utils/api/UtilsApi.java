@@ -11,6 +11,4 @@ public class UtilsApi {
     public static ApiService getAPIService(){
         return RetrofitClient.getClient(BASE_URL_API).create(ApiService.class);
     }
-
-
 }

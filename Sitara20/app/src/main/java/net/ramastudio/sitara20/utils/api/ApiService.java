@@ -28,6 +28,6 @@ public interface ApiService {
     @GET("index.php/berita")
     Call<ResponseBerita> request_show_all_berita();
 
-    @GET("index.php/user/{dataId}")
-    Call<User> getUser(@Path("dataId") int dataId);
+    @GET("index.php/user/{idperkara}")
+    Call<User> getUser(@Path("idperkara") int dataId);
 }

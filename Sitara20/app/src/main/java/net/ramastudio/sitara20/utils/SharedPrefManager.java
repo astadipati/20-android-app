@@ -3,6 +3,7 @@ package net.ramastudio.sitara20.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+@Deprecated
 public class SharedPrefManager {
 
     public static final String SP_MAHASISWA_APP = "spMahasiswaApp";
